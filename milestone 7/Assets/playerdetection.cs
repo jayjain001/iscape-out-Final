@@ -31,9 +31,9 @@ public class playerdetection : MonoBehaviour
         if (hit.collider == null)
         {
             anim.SetBool(("detected"), false);
-        } else if (hit.collider.CompareTag("Player"))
+        }
+            else if (hit.collider.CompareTag("Player"))
         {
-          
             transform.position = Vector2.MoveTowards(transform.position, target.position, speed* Time.deltaTime);
             anim.SetBool(("detected"),true);
         }

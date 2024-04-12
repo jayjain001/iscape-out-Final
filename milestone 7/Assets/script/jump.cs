@@ -8,6 +8,7 @@ public class jump : MonoBehaviour
     public float speedj =2;
     public Rigidbody2D rb;
     public bool canjump = true;
+    public bool rukja = true;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -17,7 +18,7 @@ public class jump : MonoBehaviour
     void Update()
     {
         
-        if (Input.GetKeyDown(KeyCode.Space)&& canjump == true )
+        if (Input.GetKeyDown(KeyCode.Space)&& canjump == true && rukja == true )
         {
             rb.AddForce(new Vector2(transform.position.x, jumping * speedj));
             canjump = false;
@@ -25,7 +26,7 @@ public class jump : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("land"))
+        if (collision.collider.CompareTag("land")&& rukja == true)
         {
             canjump = true;
         }

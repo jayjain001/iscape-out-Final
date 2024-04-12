@@ -10,6 +10,7 @@ public class aftercontroll : MonoBehaviour
     public Rigidbody2D rb;
     public float speedj;
     public bool ok = false;
+    public bool okk = false;
     
 
     // Start is called before the first frame update
@@ -28,26 +29,26 @@ public class aftercontroll : MonoBehaviour
 
             if (moveHorizontal>0)
             {
-                this.gameObject.transform.localScale = new  Vector3(1,1,1);  
+                this.gameObject.transform.localScale = new  Vector3(-1,1,1)* 0.67296f;  
             }else if (moveHorizontal < 0)
             {
-                this.gameObject.transform.localScale = new Vector3(-1, 1, 1);   
+                this.gameObject.transform.localScale = new Vector3(1, 1, 1) * 0.67296f;   
             }
 
-            if (Input.GetKeyDown(KeyCode.Space) && ok  == true)
+            if (Input.GetKeyDown(KeyCode.Space) && okk  == true)
             {
                 Debug.Log("kud");
                 rb.AddForce(Vector2.up * speedj);
-                ok = false; 
+                okk = false; 
 
             }
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-       if(collision.collider.CompareTag("land"))
+       if(collision.collider.CompareTag("land")&& ok == true )
         {
-            ok = true;
+            okk = true;
         }
     }
 }
