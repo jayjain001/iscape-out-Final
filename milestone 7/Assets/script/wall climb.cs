@@ -5,53 +5,76 @@ using UnityEngine.Rendering;
 
 public class wallclimb : MonoBehaviour
 {
-    public float verticle;
-    public float climbspeed;
-    public bool isclimbing;
-    public bool onwall;
-    public BoxCollider2D boxCollider;
-    [SerializeField] Rigidbody2D rb;
+    private float horizontal;
+    private float speed = 10f;
+    private float jumpPower = 16f;
 
-    private void Start()
-    {
-        rb = this.GetComponent<Rigidbody2D>();     
-    }
+    private bool isWallSliding = false;
+    private float wallSlidingSpeed = 2f; // change it accourding to your needs.
+
+    private bool isWallClimbing;
+    private float wallClimbingSpeed = 5f;// change it accourding to your needs.
+
+    [SerializeField] private Rigidbody2D rb;
 
 
-    // Update is called once per frame
+    // just copy and paste these two line if you are adding more Groundcheck;
+    [SerializeField] private Transform groundcheck;
+    [SerializeField] private LayerMask groundLayer;
+
+    // just copy and paste these two line if you are adding more wallcheck;
+    [SerializeField] private Transform wallcheck;
+    [SerializeField] private LayerMask wallLayer;
+
     void Update()
     {
-        verticle = Input.GetAxis("verticle");
-        if(isclimbing&& Mathf.Abs(verticle) > 0f)
+       
+
+        WallSlide();
+
+        if (IsWalled() && Input.GetKey(KeyCode.LeftShift))
         {
-            isclimbing = true;
-        }   
-    }
-    private void FixedUpdate()
-    {
-        if(isclimbing == true)
-        {
-            rb.gravityScale = 0f;
-            rb.velocity = new Vector2 (rb.velocity.x,verticle*climbspeed);
+            isWallClimbing = true;
         }
         else
         {
-            rb.gravityScale = 5F;
+            isWallClimbing = false;
+        }
+
+    }
+
+    private void FixedUpdate()
+    {
+        if (isWallClimbing)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, Input.GetAxis("Vertical") * wallClimbingSpeed);
+        }
+        else
+        {
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    private bool IsGrounded()
     {
-        if (collision.CompareTag("climb"))
-        {
-            onwall = true;  
-        }
+        return Physics2D.OverlapCircle(groundcheck.position, 1f, groundLayer); // DEFAULT VALUE: 0.2F BUT I AM CHANING IT BCS i AM USING A WHOLE CIRLCE.
     }
-    private void OnTriggerExit2D(Collider2D collision)
+
+    private bool IsWalled()
     {
-        if (collision.CompareTag("climb"))
+        return Physics2D.OverlapCircle(wallcheck.position, 1f, wallLayer); // change it accourding to your needs.
+    }
+
+    private void WallSlide()
+    {
+        if (IsWalled()&& IsGrounded() && horizontal != 0f && !isWallClimbing)
         {
-            onwall= false;
-            isclimbing = false;
+            isWallSliding = true;
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+        }
+        else
+        {
+            isWallSliding = false;
         }
     }
 }

@@ -9,6 +9,9 @@ TagManager:
   - enemy
   - wall
   - climb
+  - box
+  - walls
+  - grap
   layers:
   - Default
   - TransparentFX
@@ -20,7 +23,7 @@ TagManager:
   - grappling
   - player
   - aa
-  - 
+  - climb
   - 
   - 
   - 
